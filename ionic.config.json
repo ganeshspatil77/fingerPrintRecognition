@@ -1,0 +1,7 @@
+{
+  "name": "fingerprint-recog",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
