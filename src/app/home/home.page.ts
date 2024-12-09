@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BiometryType, NativeBiometric } from "capacitor-native-biometric";
 
 @Component({
@@ -10,7 +11,7 @@ export class HomePage implements OnInit {
 
   userName:string = 'Ganesh';
   pass:string = '12345678'
-  constructor() { }
+  constructor(private router:Router) { }
 
   async ngOnInit() {
     await this.setCrediantials();
@@ -32,19 +33,19 @@ export class HomePage implements OnInit {
 
     const isFaceID = result.biometryType == BiometryType.FACE_ID;
 
-    console.log('isFaceID',isFaceID);
-    
-
     const verified = await NativeBiometric.verifyIdentity({
       reason: "For easy log in",
       title: "Log in",
-      subtitle: "Maybe add subtitle here?",
-      description: "Maybe a description too?",
-    }).then(() =>
-      console.log('success')
-    ).catch(() => false);
+      subtitle: "Fingerprint Authentication",
+    }).then(() =>true).catch(() => false);
     console.log('verified', verified)
-    if (!verified) return;
+    if (!verified){
+      this.performBiometricVerificatin();
+    };
+
+    if (verified){
+      this.router.navigateByUrl('/landing');
+    }
 
     const credentials = await NativeBiometric.getCredentials({
       server: "www.example.com",
